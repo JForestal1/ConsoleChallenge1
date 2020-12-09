@@ -1,0 +1,13 @@
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.csprojAssemblyReference.cache
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.AssemblyInfoInputs.cache
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.AssemblyInfo.cs
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.csproj.CoreCompileInputs.cache
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.exe
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.deps.json
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.runtimeconfig.json
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.runtimeconfig.dev.json
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.dll
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\bin\Debug\netcoreapp3.1\ConsoleChallenge1.pdb
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.dll
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.pdb
+D:\ElevenFiftyProjects\CSharpFundementals\ConsoleChallenges\obj\Debug\netcoreapp3.1\ConsoleChallenge1.genruntimeconfig.cache
