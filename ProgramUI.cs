@@ -10,13 +10,89 @@ namespace ConsoleChallenges
 
         public void Run()
         {
-            SeedMenu1();
-            SeedMenu2();
- //           GetSingleMenuItem();
- //           GetSingleMenuItem();
-            Console.WriteLine("+++++++++++++++++++++ Now Add \n");
-            AddMenuItem();
-            GetAllMenuItems();
+            Menu();
+        }
+
+        // Menu
+        private void Menu()
+        {
+            bool active = true;
+
+            while (active)
+            {
+                Console.WriteLine("Select an Option:\n" +
+                "1. Add a new menu item\n" +
+                "2. Delete a menu item\n" +
+                "3. View a single menu item\n" +
+                "4. View entire menu\n" +
+                "5. Update a Menu Item\n" +
+                "6. Add ingredients to an existing menu item\n" +
+                "X - Exit");
+
+                string choice = Console.ReadLine().ToLower();
+
+                switch (choice)
+                {
+                    case "1":
+                        {
+                            AddMenuItem();
+                            break;
+                        }
+                    case "2":
+                        {
+                            DeleteMenuItem();
+                            break;
+                        }
+                    case "3":
+                        {
+                            ViewMenuItem();
+                            break;
+                        }
+                    case "4":
+                        {
+                            ViewAllMenuItems();
+                            break;
+                        }
+                    case "5":
+                        {
+                            UpdateItem();
+                            break;
+                        }
+                    case "6":
+                        {
+                            AddIngredientsToItem();
+                            break;
+                        }
+                    case "s1":
+                        {
+                            SeedMenu1();
+                            break;
+                        }
+                    case "s2":
+                        {
+                            SeedMenu2();
+                            break;
+                        }
+                    case "x":
+                        {
+                            Console.WriteLine("Thanks for coming by");
+                            Console.Beep(1000, 500);
+                            active = false;
+                            break;
+                        }
+                    default:
+                        {
+                            Console.WriteLine("Please enter a valid choice!");
+                            break;
+                        }
+                }
+                if (active)
+                {
+                    Console.WriteLine("Press any key to continue");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+            }
         }
 
         // Seed A Menu Item
@@ -88,12 +164,12 @@ namespace ConsoleChallenges
         private void GetSingleMenuItem()
         {
             var menuItemToView = new MenuItems();
-            Console.WriteLine("Enter a Menu Item to Review:");
+            Console.WriteLine("\nEnter a menu item to Review:");
             string nameOfMenuItemToView = Console.ReadLine();
             DisplayMenuItem(_menu.GetMenuItemByName(nameOfMenuItemToView));
 
         }
-        private void GetAllMenuItems()
+        private void ViewAllMenuItems()
         {
             List<MenuItems> _ViewMenu = new List<MenuItems>();
             if (_menu.GetEntireMenu() != null)
@@ -109,9 +185,6 @@ namespace ConsoleChallenges
                 Console.WriteLine("No Menu items exist yet");
         }
 
-
- 
-
         private void AddMenuItem()
         {
             // initatize stuff
@@ -123,11 +196,11 @@ namespace ConsoleChallenges
             while (active)
             {
                 newMenuItem = CollectMenuItemInput();
-                Console.WriteLine("Do you wish to add ingredients to this item? (y/n)");
+                Console.WriteLine("\nDo you wish to add ingredients to this item? (y/n)");
                 continueString = Console.ReadLine();
                 if (continueString.ToLower() == "y")
                 {
-                    newMenuItem._ListOfIngredients = CollectIngredientInput();
+                    newMenuItem._ListOfIngredients = CollectIngredientInput("");
                 }
                 if (_menu.AddMenuItem(newMenuItem))
                 {
@@ -145,22 +218,144 @@ namespace ConsoleChallenges
                 }
             }
         }
+        private void AddIngredientsToItem()
+        {
+            // initatize stuff
+            var menuItemToAddTo = new MenuItems();
+            string menuItemToAddIngretientsTo;
+            Console.WriteLine("\nWhich menu item would you like to add ingredients?");
+            menuItemToAddIngretientsTo = Console.ReadLine();
+            menuItemToAddTo = _menu.GetMenuItemByName(menuItemToAddIngretientsTo);
+            menuItemToAddTo._ListOfIngredients.AddRange(CollectIngredientInput(""));
+        }
         private void DisplayMenuItem(MenuItems itemToDisplay)
         {
             Console.WriteLine("Item Number: " + itemToDisplay.MenuItem);
             Console.WriteLine("Item Name: " + itemToDisplay.MenuName);
             Console.WriteLine("Item Description: " + itemToDisplay.Description);
             Console.WriteLine("Item price: " + itemToDisplay.Price);
-            if (itemToDisplay._ListOfIngredients != null) 
-                    foreach (Ingredients ingredientToDisplay in itemToDisplay._ListOfIngredients)
-                    {
-                        Console.WriteLine("Item Ingredient: " + ingredientToDisplay.Item);
-                        Console.WriteLine("Item Ingredient quantity: " + ingredientToDisplay.Quantity);
-                        Console.WriteLine("Item Ingredient Unit of Measurement: " + ingredientToDisplay.Units);
-                    }
+            if (itemToDisplay._ListOfIngredients != null)
+                foreach (Ingredients ingredientToDisplay in itemToDisplay._ListOfIngredients)
+                {
+                    Console.WriteLine("Ingredient: " + ingredientToDisplay.Item);
+                    Console.WriteLine("Ingredient quantity: " + ingredientToDisplay.Quantity);
+                    Console.WriteLine("Ingredient Unit of Measurement: " + ingredientToDisplay.Units);
+                }
             else
             {
                 Console.WriteLine("Item contains no ingredients yet");
+            }
+        }
+        // delete menu item
+        private void DeleteMenuItem()
+        {
+            Console.WriteLine("Enter the name of the Ingredient to delete:");
+            string itemToDelete = Console.ReadLine();
+            if (_menu.RemoveMenuItem(itemToDelete))
+            {
+                Console.WriteLine("Item Deleted");
+            }
+            else
+            {
+                Console.WriteLine("Item not deleted");
+            }
+        }
+
+        // view single item
+        private void ViewMenuItem()
+        {
+            var itemToView = new MenuItems();
+            Console.WriteLine("\nEnter the name of the menu item to View:");
+            string itemToDelete = Console.ReadLine();
+            itemToView = _menu.GetMenuItemByName(itemToDelete);
+            if (itemToView != null)
+            {
+                DisplayMenuItem(itemToView);
+            }
+            else
+            {
+                Console.WriteLine("Menu Item not found");
+            }
+        }
+
+        private void UpdateItem()
+        {
+            // get menu item to update
+            var itemToEdit = new MenuItems();
+            var ingredientToEdit = new Ingredients();
+
+            Console.WriteLine("\nEnter the name of the menu item to update:");
+            string itemNameToEdit = Console.ReadLine();
+
+            if (_menu.GetMenuItemByName(itemNameToEdit) != null)
+            {
+                // set initial values so a skipped assignment results in no change
+                itemToEdit.MenuItem = _menu.GetMenuItemByName(itemNameToEdit).MenuItem;
+                itemToEdit.MenuName = _menu.GetMenuItemByName(itemNameToEdit).MenuName;
+                itemToEdit.Description = _menu.GetMenuItemByName(itemNameToEdit).Description;
+                itemToEdit.Price = _menu.GetMenuItemByName(itemNameToEdit).Price;
+                itemToEdit._ListOfIngredients = _menu.GetMenuItemByName(itemNameToEdit)._ListOfIngredients;
+                Console.WriteLine("\nCurrent menu item information:");
+                DisplayMenuItem(itemToEdit);
+                Console.WriteLine("\nEnter new item number (enter to leave unchanged)");
+                string newDataString = Console.ReadLine();
+                if (newDataString != "")
+                {
+                    itemToEdit.MenuItem = Int32.Parse(newDataString);
+                }
+                Console.WriteLine("\nEnter new item name (enter to leave unchanged)");
+                newDataString = Console.ReadLine();
+                if (newDataString != "")
+                {
+                    itemToEdit.MenuName = newDataString;
+                }
+                Console.WriteLine("\nEnter new item description (enter to leave unchanged)");
+                newDataString = Console.ReadLine();
+                if (newDataString != "")
+                {
+                    itemToEdit.Description = newDataString;
+                }
+                Console.WriteLine("\nEnter new item price (enter to leave unchanged)");
+                newDataString = Console.ReadLine();
+                if (newDataString != "")
+                {
+                    itemToEdit.Price = Double.Parse(newDataString);
+                }
+                if (_menu.UpdateMenuItem(itemNameToEdit, itemToEdit))
+                {
+                    Console.WriteLine("Menu item updated");
+                }
+                else
+                {
+                    Console.WriteLine("Menu item not updated");
+                }
+                if (itemToEdit._ListOfIngredients != null)
+                {
+                    Console.WriteLine("Do you wish to edit the ingredients as well (y/n)?");
+                    string editIngredientsString = Console.ReadLine();
+                    if (editIngredientsString.ToLower() == "y")
+                    {
+                        bool active = true;
+                        string toContinueToEdit = "f";
+                        string ingredientToUpdate;
+                        while (active)
+                        {
+                            Console.WriteLine("\n Which ingredient would you like to edit");
+                            ingredientToUpdate = Console.ReadLine();
+                            _menu.UpdateMenuItemIngredients(itemNameToEdit, ingredientToUpdate, GetSingleIngredient("new "));
+                            Console.WriteLine("\n Would you like to edit more ingredients (y/n)");
+                            toContinueToEdit = Console.ReadLine();
+                            if (toContinueToEdit.ToLower() != "y")
+                            {
+                                active = false;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Menu Item not found");
             }
         }
 
@@ -169,6 +364,9 @@ namespace ConsoleChallenges
         {
             var newMenuItem = new MenuItems();
             Console.WriteLine("Enter the Menu Item Number:");
+
+            // This needs better error handling
+
             newMenuItem.MenuItem = Int32.Parse(Console.ReadLine());
             Console.WriteLine("Enter Item Name");
             newMenuItem.MenuName = Console.ReadLine();
@@ -180,7 +378,7 @@ namespace ConsoleChallenges
         }
 
         // helper UI for collecting Ingredient Item Input
-        private List<Ingredients> CollectIngredientInput()
+        private List<Ingredients> CollectIngredientInput(string isNew)
         {
             var newIngredient = new Ingredients();
             var _newListOfIngredients = new List<Ingredients>();
@@ -188,52 +386,7 @@ namespace ConsoleChallenges
             bool addMore = true;
             while (addMore)
             {
-                Console.WriteLine("\nEnter the Ingredient Name:");
-                newIngredient.Item = Console.ReadLine();
-                Console.WriteLine("Enter units of measurement:\n" +
-                        "1) tbsp\n" +
-                        "2) tsp\n" +
-                        "3) cups\n" +
-                        "4) quarts\n" +
-                        "5) gallons");
-                string unitOfMeasurementString = Console.ReadLine();
-
-                switch (unitOfMeasurementString.ToLower())
-                {
-                    case "1":
-                        {
-                            newIngredient.Units = Ingredients.UnitTypes.tbsp;
-                            break;
-                        }
-                    case "2":
-                        {
-                            newIngredient.Units = Ingredients.UnitTypes.tsp;
-                            break;
-                        }
-                    case "3":
-                        {
-                            newIngredient.Units = Ingredients.UnitTypes.cups;
-                            break;
-                        }
-                    case "4":
-                        {
-                            newIngredient.Units = Ingredients.UnitTypes.quarts;
-                            break;
-                        }
-                    case "5":
-                        {
-                            newIngredient.Units = Ingredients.UnitTypes.gallons;
-                            break;
-                        }
-                    default:
-                        {
-                            Console.WriteLine("Invalid input. Defaulting to cups");
-                            newIngredient.Units = Ingredients.UnitTypes.cups;
-                            break;
-                        }
-                }
-                Console.WriteLine("Enter the quantity of this ingredient:");
-                newIngredient.Quantity = Int32.Parse(Console.ReadLine());
+                newIngredient = GetSingleIngredient("");
                 _newListOfIngredients.Add(newIngredient);
                 Console.WriteLine("\nDo you wish to add another ingredient to this menu item? (y/n)");
                 addMoreIngredientsString = Console.ReadLine();
@@ -243,6 +396,58 @@ namespace ConsoleChallenges
                 }
             }
             return _newListOfIngredients;
+        }
+
+        // helper to get a single ingredient
+        private Ingredients GetSingleIngredient(string isNew)
+        {
+            var newIngredient = new Ingredients();
+            Console.WriteLine("\nEnter the " + isNew + "ingredient name:");
+            newIngredient.Item = Console.ReadLine();
+            Console.WriteLine("\nEnter " + isNew + "units of measurement:\n" +
+                    "1) tbsp\n" +
+                    "2) tsp\n" +
+                    "3) cups\n" +
+                    "4) quarts\n" +
+                    "5) gallons");
+            string unitOfMeasurementString = Console.ReadLine();
+            switch (unitOfMeasurementString.ToLower())
+            {
+                case "1":
+                    {
+                        newIngredient.Units = Ingredients.UnitTypes.tbsp;
+                        break;
+                    }
+                case "2":
+                    {
+                        newIngredient.Units = Ingredients.UnitTypes.tsp;
+                        break;
+                    }
+                case "3":
+                    {
+                        newIngredient.Units = Ingredients.UnitTypes.cups;
+                        break;
+                    }
+                case "4":
+                    {
+                        newIngredient.Units = Ingredients.UnitTypes.quarts;
+                        break;
+                    }
+                case "5":
+                    {
+                        newIngredient.Units = Ingredients.UnitTypes.gallons;
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Invalid input. Defaulting to cups");
+                        newIngredient.Units = Ingredients.UnitTypes.cups;
+                        break;
+                    }
+            }
+            Console.WriteLine("\nEnter the" + isNew + " quantity of this ingredient:");
+            newIngredient.Quantity = Int32.Parse(Console.ReadLine());
+            return newIngredient;
         }
     }
 }

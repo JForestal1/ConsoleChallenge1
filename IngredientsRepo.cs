@@ -16,26 +16,31 @@ namespace ConsoleChallenges
         }
 
         // add individual ingredient to the list
-        public void AddIngredients (Ingredients newItem)
+        public void AddIngredients(Ingredients newItem)
         {
             _listOfIngredients.Add(newItem);
         }
 
         // Update ingredients
-        public bool UpdateExistingIngredients (string originalItem, Ingredients UpdatedIngredient)
+        public bool UpdateExistingIngredients(string originalItem, Ingredients updatedIngredient)
         {
-            Ingredients originalIngredient = GetIngredientByItem(originalItem);
-            if (originalItem != null)
+            bool recordFound = false;
+            if (GetIngredientByItem(originalItem) != null)
             {
-                originalIngredient.Item = UpdatedIngredient.Item;
-                originalIngredient.Quantity = UpdatedIngredient.Quantity;
-                originalIngredient.Units = UpdatedIngredient.Units;
-                return true;
+                foreach (Ingredients updatedIng in _listOfIngredients)
+                {
+                    if (updatedIng.Item == originalItem)
+                    {
+                        updatedIng.Item = updatedIngredient.Item;
+                        updatedIng.Quantity = updatedIngredient.Quantity;
+                        updatedIng.Units = updatedIngredient.Units;
+                        recordFound = true;
+                    }
+                }
             }
-            else
-                return false;
+            return recordFound;
         }
-         public bool RemoveIngredient(string originalItem)
+        public bool RemoveIngredient(string originalItem)
         {
             Ingredients originalIngredient = GetIngredientByItem(originalItem);
             if (originalItem != null)
@@ -49,7 +54,7 @@ namespace ConsoleChallenges
 
 
         // Get an individual ingredient by item name
-        public Ingredients GetIngredientByItem (string itemToGet)
+        public Ingredients GetIngredientByItem(string itemToGet)
         {
             foreach (Ingredients ingredient in _listOfIngredients)
                 if (ingredient.Item.ToLower() == itemToGet.ToLower())
